@@ -1,0 +1,320 @@
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recipe Finder</title>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<!-- Lucide -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ===== Shiny CTA styles ===== */
+@property --gradient-angle            { syntax:"<angle>";       initial-value:0deg;   inherits:false;}
+@property --gradient-angle-offset     { syntax:"<angle>";       initial-value:0deg;   inherits:false;}
+@property --gradient-percent          { syntax:"<percentage>";  initial-value:20%;    inherits:false;}
+@property --gradient-shine            { syntax:"<color>";       initial-value:#8484ff;inherits:false;}
+:root{
+--shiny-cta-bg:#000;
+--shiny-cta-bg-subtle:#1a1818;
+--shiny-cta-fg:#fff;
+--shiny-cta-highlight:#1d4ed8;
+--shiny-cta-highlight-subtle:#8484ff;
+}
+.shiny-cta{
+--gradient-angle:0deg;
+--gradient-angle-offset:0deg;
+--gradient-percent:20%;
+--gradient-shine:var(--shiny-cta-highlight-subtle);
+position:relative;
+overflow:hidden;
+border-radius:9999px;
+padding:1.25rem 2.5rem;
+font-size:1.125rem;
+line-height:1.2;
+font-weight:600;
+color:var(--shiny-cta-fg);
+background:
+linear-gradient(var(--shiny-cta-bg),var(--shiny-cta-bg)) padding-box,
+conic-gradient(
+from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+transparent 0%,
+var(--shiny-cta-highlight) 5%,
+var(--gradient-shine) 15%,
+var(--shiny-cta-highlight) 30%,
+transparent 40%,
+transparent 100%) border-box;
+border:2px solid transparent;
+box-shadow:inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+transition:
+--gradient-angle-offset 800ms cubic-bezier(.25,1,.5,1),
+--gradient-percent 800ms cubic-bezier(.25,1,.5,1),
+--gradient-shine 800ms cubic-bezier(.25,1,.5,1),
+box-shadow .3s;
+cursor:pointer;
+font-family:inherit;
+animation:border-spin 2.5s linear infinite;
+outline-offset:4px;
+}
+@keyframes border-spin{to{--gradient-angle:360deg}}
+.shiny-cta:active{transform:translateY(1px)}
+.shiny-cta::before{
+content:'';
+position:absolute;
+inset:0;
+margin:3px;
+border-radius:inherit;
+background:radial-gradient(circle,transparent 0,var(--shiny-cta-bg-subtle) 100%);
+z-index:0;
+pointer-events:none;
+}
+.shiny-cta::after{
+content:'';
+position:absolute;
+left:50%;top:50%;
+width:100%;aspect-ratio:1;
+transform:translate(-50%,-50%);
+background:linear-gradient(-50deg,transparent,var(--shiny-cta-highlight),transparent);
+mask-image:radial-gradient(circle at bottom,transparent 40%,black);
+opacity:.6;
+animation:shimmer 4s linear infinite;
+pointer-events:none;
+z-index:1;
+}
+@keyframes shimmer{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.shiny-cta span{position:relative;z-index:2;display:inline-flex;align-items:center;gap:.5rem;}
+</style></head>
+
+<body class="font-inter bg-neutral-900 text-white selection:bg-emerald-500/30">
+  <!-- Landing / Hero -->
+  <section id="landing" class="relative h-screen w-full overflow-hidden hidden">
+    <!-- Video + image fallback -->
+    <video class="absolute inset-0 h-full w-full object-cover" src="https://cdn.coverr.co/videos/coverr-cooking-ingredients-6694/1080p.mp4" autoplay="" muted="" loop="" playsinline="" poster="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1920&amp;q=80"></video>
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/40 sm:bg-black/30"></div>
+
+    <!-- Hero content -->
+    <div class="relative z-10 flex flex-col items-center justify-center h-full px-6 text-center space-y-6">
+      <h1 data-animate="" class="opacity-0 transition-all duration-700 sm:text-6xl lg:text-7xl text-4xl font-semibold tracking-tight blur-sm translate-y-8">
+        Turn What You Have into What You Crave
+      </h1>
+      <p data-animate="" class="transition-all duration-700 text-lg sm:text-xl max-w-xl">
+        Find real recipes using the ingredients you already have.
+      </p>
+
+      <!-- Shiny CTA -->
+      <button data-animate="" class="shiny-cta focus:outline-none">
+        <span>Get Cooking <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" class="lucide lucide-arrow-right w-5 h-5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Main App -->
+  <section id="app" class="min-h-screen bg-neutral-950 text-white">
+    <!-- Mobile top bar -->
+    <header class="flex md:hidden items-center justify-between px-4 py-3 border-b border-white/10 backdrop-blur-lg sticky top-0 z-20">
+      <h2 class="text-xl font-semibold tracking-tight">Recipe Finder</h2>
+      <button id="sidebarToggle" class="p-2 rounded-md hover:bg-white/10 transition" aria-label="Open sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" class="lucide lucide-menu w-6 h-6"><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M4 6h16"></path></svg>
+      </button>
+    </header>
+
+    <div class="grid md:grid-cols-[320px_1fr]">
+      <!-- Sidebar -->
+      <aside id="sidebar" class="border-r border-white/10 bg-neutral-900/80 backdrop-blur-lg md:sticky md:top-0 md:h-screen flex flex-col p-6 space-y-6 md:translate-x-0 -translate-x-full md:relative fixed inset-y-0 left-0 w-72 z-30 transition-transform">
+        <div class="flex md:hidden justify-end">
+          <button id="closeSidebar" class="p-2 rounded-md hover:bg-white/10 transition" aria-label="Close sidebar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="x" class="lucide lucide-x w-5 h-5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+
+        <!-- Ingredient Input -->
+        <div class="space-y-3">
+          <label for="ingredientInput" class="block text-sm font-medium">Add Ingredient</label>
+          <input id="ingredientInput" type="text" placeholder="e.g., Tomato" class="w-full rounded-lg bg-neutral-800 border border-white/10 focus:ring-emerald-500 focus:border-emerald-500 placeholder:text-neutral-400" aria-label="Ingredient">
+          <div id="ingredientTags" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div class="border-t border-white/10"></div>
+
+        <!-- Trusted Sources -->
+        <div class="space-y-3">
+          <h3 class="font-medium">Trusted Sources</h3>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" class="accent-emerald-500 h-4 w-4 rounded" checked="">
+              <span>AllRecipes</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" class="accent-emerald-500 h-4 w-4 rounded" checked="">
+              <span>Food Network</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" class="accent-emerald-500 h-4 w-4 rounded">
+              <span>Tasty</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="border-t border-white/10"></div>
+
+        <!-- Custom Source -->
+        <div class="space-y-3">
+          <h3 class="font-medium">Add Custom Source</h3>
+          <div class="flex gap-2">
+            <button data-tab="blog" class="tab active px-3 py-1.5 rounded-md text-sm bg-white/10 hover:bg-white/20 transition">Blog/Website</button>
+            <button data-tab="social" class="tab px-3 py-1.5 rounded-md text-sm hover:bg-white/10 transition">Social Media</button>
+          </div>
+          <input id="customSourceInput" type="text" placeholder="example.com or @username" class="w-full rounded-lg bg-neutral-800 border border-white/10 focus:ring-emerald-500 focus:border-emerald-500 placeholder:text-neutral-400" aria-label="Custom source">
+          <button id="addSourceBtn" class="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 transition font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plus" class="lucide lucide-plus w-4 h-4"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg> Add Source
+          </button>
+          <p id="sourceFeedback" class="hidden text-sm text-emerald-400 flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" class="lucide lucide-check-circle w-4 h-4"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> Source added
+          </p>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="p-6 space-y-8">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">Recipes</h2>
+          <p class="text-neutral-400">Add at least two ingredients to start seeing results.</p>
+        </div>
+
+        <!-- States -->
+        
+        <div id="recipeGrid" class="hidden grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+        <!-- Loading -->
+        <div id="loading" class="hidden flex items-center justify-center py-16" role="status" aria-live="polite">
+          <svg class="animate-spin h-8 w-8 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script>
+    lucide.createIcons();
+
+    // Sequential hero reveal
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("#landing [data-animate]")
+        .forEach((el, i) =>
+          setTimeout(() => el.classList.remove("opacity-0", "translate-y-8", "blur-sm"), i * 150)
+        );
+    });
+
+    // Navigation
+    const landing = document.getElementById("landing");
+    const app     = document.getElementById("app");
+    document.getElementById("startBtn").addEventListener("click", () => {
+      landing.classList.add("hidden");
+      app.classList.remove("hidden");
+    });
+
+    // Sidebar (mobile)
+    const sidebar = document.getElementById("sidebar");
+    document.getElementById("sidebarToggle").addEventListener("click", () => sidebar.classList.toggle("-translate-x-full"));
+    document.getElementById("closeSidebar").addEventListener("click", () => sidebar.classList.add("-translate-x-full"));
+
+    // Ingredient logic
+    const ingredientInput = document.getElementById("ingredientInput");
+    const ingredientTags  = document.getElementById("ingredientTags");
+    const recipeGrid      = document.getElementById("recipeGrid");
+    const emptyState      = document.getElementById("emptyState");
+    const loading         = document.getElementById("loading");
+    let ingredients = [];
+
+    ingredientInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && ingredientInput.value.trim()) {
+        addIngredient(ingredientInput.value.trim());
+        ingredientInput.value = "";
+      }
+    });
+
+    function addIngredient(name) {
+      if (ingredients.includes(name.toLowerCase())) return;
+      ingredients.push(name.toLowerCase());
+
+      const tag = document.createElement("span");
+      tag.className = "flex items-center gap-1 bg-white/10 rounded-full px-3 py-1 text-sm";
+      tag.innerHTML = `${name}
+        <button aria-label="Remove ingredient" class="hover:text-red-400" data-name="${name}">
+          <i data-lucide='x' class='w-3 h-3'></i>
+        </button>`;
+      ingredientTags.appendChild(tag);
+      lucide.createIcons();
+
+      tag.querySelector("button").addEventListener("click", () => {
+        ingredients = ingredients.filter(ing => ing !== name.toLowerCase());
+        tag.remove();
+        evaluateIngredients();
+      });
+      evaluateIngredients();
+    }
+
+    function evaluateIngredients() {
+      if (ingredients.length >= 2) {
+        fetchRecipes();
+      } else {
+        recipeGrid.classList.add("hidden");
+        emptyState.classList.remove("hidden");
+      }
+    }
+
+    // Mock fetch
+    function fetchRecipes() {
+      loading.classList.remove("hidden");
+      recipeGrid.classList.add("hidden");
+      emptyState.classList.add("hidden");
+
+      setTimeout(() => {
+        loading.classList.add("hidden");
+        recipeGrid.innerHTML = "";
+        for (let i = 1; i <= 6; i++) recipeGrid.appendChild(createRecipeCard(i));
+        recipeGrid.classList.remove("hidden");
+        lucide.createIcons();
+      }, 1200);
+    }
+
+    function createRecipeCard(i) {
+      const card = document.createElement("article");
+      card.className = "relative overflow-hidden rounded-xl bg-neutral-800 shadow-lg hover:shadow-emerald-500/10 group transition";
+      card.innerHTML = `
+        <img src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=1080&q=80" alt="Dish ${i}" class="h-40 w-full object-cover group-hover:scale-105 transition duration-500"/>
+        <div class="p-4 space-y-2">
+          <h3 class="text-lg font-medium hover:text-emerald-400 transition"><a href="#" target="_blank" rel="noopener">Delicious Dish ${i}</a></h3>
+          <p class="text-sm text-neutral-400">A short tasty description that makes you hungry.</p>
+          <div class="flex items-center justify-between mt-3">
+            <span class="text-xs text-neutral-500">AllRecipes</span>
+            <span class="text-xs bg-emerald-600/20 text-emerald-400 px-2 py-0.5 rounded-full">87% match</span>
+          </div>
+        </div>`;
+      return card;
+    }
+
+    // Custom source feedback
+    const addSourceBtn   = document.getElementById("addSourceBtn");
+    const sourceFeedback = document.getElementById("sourceFeedback");
+    addSourceBtn.addEventListener("click", () => {
+      sourceFeedback.classList.remove("hidden");
+      setTimeout(() => sourceFeedback.classList.add("hidden"), 2500);
+    });
+
+    // Tabs for custom source
+    document.querySelectorAll(".tab").forEach(btn =>
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(b => b.classList.remove("bg-white/10", "active"));
+        btn.classList.add("bg-white/10", "active");
+      })
+    );
+  </script>
+
+</body></html>
