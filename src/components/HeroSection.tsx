@@ -30,6 +30,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onGetCooking }) => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/40 sm:bg-black/30" />
 
+      {/* Bolt Badge - Top Right */}
+      <div className="absolute top-4 right-4 z-20">
+        <img
+          src="/Bolt Badge.png"
+          alt="Bolt Badge"
+          className="w-16 h-16 sm:w-20 sm:h-20 opacity-80 hover:opacity-100 transition-opacity duration-300"
+        />
+      </div>
+
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-start justify-center h-full px-4 sm:px-16 text-left space-y-6 w-full max-w-3xl">
         <h1
@@ -45,7 +54,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onGetCooking }) => {
             isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-Find trusted recipes with what you’ve got, no guessing!
+Find trusted recipes with what you've got, no guessing!
 
 </p>
 
