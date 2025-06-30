@@ -25,28 +25,29 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onGetCooking }) => {
         muted
         loop
         playsInline
-        poster="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1920&q=80"
       />
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/40 sm:bg-black/30" />
 
       {/* Hero Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 text-center space-y-6">
+      <div className="relative z-10 flex flex-col items-start justify-center h-full px-4 sm:px-16 text-left space-y-6 w-full max-w-3xl">
         <h1
-          className={`transition-all duration-700 sm:text-6xl lg:text-7xl text-4xl font-semibold tracking-tight ${
+          className={`transition-all duration-700 text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight whitespace-normal sm:whitespace-nowrap leading-tight ${
             isAnimated ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-8 blur-sm'
           }`}
         >
-          Turn What You Have into What You Crave
+          <span className="hidden sm:inline"> </span><br className="block sm:hidden" />From Fridge to Feast. Fast.
+
         </h1>
         <p
-          className={`transition-all duration-700 delay-150 text-lg sm:text-xl max-w-xl ${
+          className={`transition-all duration-700 delay-150 text-base sm:text-lg max-w-2xl whitespace-normal sm:whitespace-nowrap ${
             isAnimated ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          Find real recipes using the ingredients you already have.
-        </p>
+Find trusted recipes with what you’ve got, no guessing!
+
+</p>
 
         {/* Shiny CTA Button */}
         <button
@@ -56,7 +57,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onGetCooking }) => {
           }`}
         >
           <span>
-            Get Cooking <ArrowRight className="w-5 h-5" />
+           Get Cooking
           </span>
         </button>
       </div>
