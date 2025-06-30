@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
 
 interface HeroSectionProps {
   onGetCooking: () => void;
@@ -40,7 +39,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onGetCooking }) => {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 flex flex-col items-start justify-center h-full px-4 sm:px-16 text-left space-y-6 w-full max-w-3xl">
+      <div className="relative z-10 flex flex-col items-`start justify-center h-full px-4 sm:px-16 text-left space-y-6 w-full max-w-3xl">
         <h1
           className={`transition-all duration-700 text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight whitespace-normal sm:whitespace-nowrap leading-tight ${
             isAnimated ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-8 blur-sm'

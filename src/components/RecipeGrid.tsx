@@ -3,12 +3,14 @@ import { Loader2 } from 'lucide-react';
 import RecipeCard from './RecipeCard';
 
 interface Recipe {
-  id: number;
+  id: string;
   title: string;
   description: string;
   image: string;
   source: string;
-  match: number;
+  url: string;
+  matchPercentage: number;
+  ingredients: string[];
 }
 
 interface RecipeGridProps {
@@ -21,52 +23,64 @@ const RecipeGrid: React.FC<RecipeGridProps> = ({ ingredients }) => {
 
   const mockRecipes: Recipe[] = [
     {
-      id: 1,
+      id: '1',
       title: 'Mediterranean Pasta Salad',
       description: 'A fresh and vibrant pasta salad with Mediterranean flavors.',
       image: 'https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?w=400&q=80',
       source: 'AllRecipes',
-      match: 92,
+      url: 'https://allrecipes.com/recipe/mediterranean-pasta-salad',
+      matchPercentage: 92,
+      ingredients: ['pasta', 'olives', 'tomatoes', 'cucumber', 'feta cheese'],
     },
     {
-      id: 2,
+      id: '2',
       title: 'Herb-Crusted Chicken',
       description: 'Juicy chicken breast with a crispy herb crust.',
       image: 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&q=80',
       source: 'Food Network',
-      match: 87,
+      url: 'https://foodnetwork.com/recipe/herb-crusted-chicken',
+      matchPercentage: 87,
+      ingredients: ['chicken breast', 'herbs', 'breadcrumbs', 'olive oil'],
     },
     {
-      id: 3,
+      id: '3',
       title: 'Vegetable Stir Fry',
       description: 'Quick and healthy stir fry with fresh vegetables.',
       image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&q=80',
       source: 'Tasty',
-      match: 85,
+      url: 'https://tasty.co/recipe/vegetable-stir-fry',
+      matchPercentage: 85,
+      ingredients: ['broccoli', 'carrots', 'bell peppers', 'soy sauce'],
     },
     {
-      id: 4,
+      id: '4',
       title: 'Creamy Mushroom Risotto',
       description: 'Rich and creamy risotto with wild mushrooms.',
       image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=400&q=80',
       source: 'AllRecipes',
-      match: 89,
+      url: 'https://allrecipes.com/recipe/creamy-mushroom-risotto',
+      matchPercentage: 89,
+      ingredients: ['arborio rice', 'mushrooms', 'parmesan cheese', 'white wine'],
     },
     {
-      id: 5,
+      id: '5',
       title: 'Spicy Thai Curry',
       description: 'Aromatic Thai curry with coconut milk and fresh herbs.',
       image: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&q=80',
       source: 'Food Network',
-      match: 91,
+      url: 'https://foodnetwork.com/recipe/spicy-thai-curry',
+      matchPercentage: 91,
+      ingredients: ['coconut milk', 'curry paste', 'vegetables', 'fish sauce'],
     },
     {
-      id: 6,
+      id: '6',
       title: 'Classic Caesar Salad',
       description: 'Traditional Caesar salad with homemade croutons.',
       image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400&q=80',
       source: 'AllRecipes',
-      match: 83,
+      url: 'https://allrecipes.com/recipe/classic-caesar-salad',
+      matchPercentage: 83,
+      ingredients: ['romaine lettuce', 'parmesan cheese', 'croutons', 'caesar dressing'],
     },
   ];
 
